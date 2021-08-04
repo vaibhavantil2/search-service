@@ -77,7 +77,7 @@ class PaymentConsumer(bootsteps.ConsumerStep):
 
             with transaction.atomic():
                 checkout = Checkout.objects.get(id=str(data['checkout_id']))
-                checkout.status_id = "e2182812-d1b0-4585-99bf-6510497602ab"
+                checkout.product_history = "e2182812-d1b0-4585-99bf-6510497602ab"
                 checkout.remote_id = purchase_id
                 checkout.save()
 
