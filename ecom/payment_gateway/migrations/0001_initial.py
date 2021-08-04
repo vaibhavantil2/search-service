@@ -60,7 +60,7 @@ class Migration(migrations.Migration):
                 ('updated_at', models.DateTimeField(auto_now_add=True)),
                 ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
                 ('max_installments', models.SmallIntegerField(blank=True, help_text='If you do not allow installments, leave as 0', null=True, verbose_name='installment')),
-                ('discount_percentage', models.PositiveSmallIntegerField(blank=True, help_text='Discount in % (if not, leave it at 0)', null=True, verbose_name='installment')),
+                ('discount_percentage', models.PositiveSmallIntegerField(blank=True, help_text='In % (if not, leave it at 0)', null=True, verbose_name='installment')),
                 ('payment_method', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='payment_gateway.PaymentMethod', verbose_name='payment method')),
             ],
             options={
