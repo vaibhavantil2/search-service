@@ -2,12 +2,7 @@ from common.models import AutoCreateUpdatedMixin
 from polymorphic.models import PolymorphicModel
 from django.db import models
 from enum import Enum
-import uuid
-
-class PaymentMethodEnum(Enum):
-    CREDIT_CARD = 'credit_card'
-    BANK_SLIP = 'bank_slip'
-
+import uu
 payment_method_choices = [(pm.value, pm.name) for pm in PaymentMethodEnum]
 
 class PaymentMethod(AutoCreateUpdatedMixin):
