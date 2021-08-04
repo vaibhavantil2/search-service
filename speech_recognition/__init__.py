@@ -1263,7 +1263,7 @@ class Recognizer(AudioSource):
             convert_width=2  # audio samples should be 16-bit
         )
         url = "https://api.houndify.com/v1/audio"
-        user_id, request_id = str(uuid.uuid4()), str(uuid.uuid4())
+        account_id, request_id = str(uuid.uuid4()), str(uuid.uuid4())
         request_time = str(int(time.time()))
         request_signature = base64.urlsafe_b64encode(
             hmac.new(
@@ -1293,7 +1293,7 @@ class Recognizer(AudioSource):
             raise UnknownValueError()
         return result['Disambiguation']['ChoiceData'][0]['Transcription']
 
-    def recognize_ibm(self, audio_data, username, password, language="en-US", show_all=False):
+    def recognize_ibm(self, audio_data, username, accountId, password, language="en-US", show_all=False):
         """
         Performs speech recognition on ``audio_data`` (an ``AudioData`` instance), using the IBM Speech to Text API.
 
