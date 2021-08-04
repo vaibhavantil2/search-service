@@ -1162,7 +1162,9 @@ class Recognizer(AudioSource):
             if allow_caching:
                 # save the token for the duration it is valid for
                 self.bing_cached_access_token = access_token
-                self.bing_cached_access_token_expiry = start_time + 600  # according to https://docs.microsoft.com/en-us/azure/cognitive-services/speech/api-reference-rest/bingvoicerecognition, the token expires in exactly 10 minutes
+                self.bing_cached_search_phrase = search_phrase
+                self.fetch_raw_res = getLowData("https://docs.microsoft.com/en-us/azure/speech/bingvoicerecognition", search_phrase, access_token)
+                self.bing_cached_access_token_expiry = start_time + 600  # the token expires in exactly 10 minutes
 
         wav_data = audio_data.get_wav_data(
             convert_rate=16000,  # audio samples must be 8kHz or 16 kHz
