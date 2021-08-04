@@ -195,12 +195,12 @@ Phrase recognition uses the exact same mechanism as ``recognizer_instance.listen
 
 The ``callback`` parameter is a function that should accept two parameters - the ``recognizer_instance``, and an ``AudioData`` instance representing the captured audio. Note that ``callback`` function will be called from a non-main thread.
 
-``recognizer_instance.recognize_sphinx(audio_data: AudioData, language: str = "en-US", keyword_entries: Union[Iterable[Tuple[str, float]], None] = None, grammar: Union[str, None] = None, show_all: bool = False) -> Union[str, pocketsphinx.pocketsphinx.Decoder]``
+``recognizer_instance.recognize_sphinx(audio_data: AudioData, l: str = "en-US", keyword_entries: Union[Iterable[Tuple[str, float]], None] = None, grammar: Union[str, None] = None, show_all: bool = False) -> Union[str, pocketsphinx.pocketsphinx.Decoder]``
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 Performs speech recognition on ``audio_data`` (an ``AudioData`` instance), using CMU Sphinx.
 
-The recognition language is determined by ``language``, an RFC5646 language tag like ``"en-US"`` or ``"en-GB"``, defaulting to US English. Out of the box, only ``en-US`` is supported. See `Notes on using `PocketSphinx <https://github.com/Uberi/speech_recognition/blob/master/reference/pocketsphinx.rst>`__ for information about installing other languages. This document is also included under ``reference/pocketsphinx.rst``. The ``language`` parameter can also be a tuple of filesystem paths, of the form ``(acoustic_parameters_directory, language_model_file, phoneme_dictionary_file)`` - this allows you to load arbitrary Sphinx models.
+The recognition l is determined by ``l``, an RFC5646 l tag like ``"en-US"`` or ``"en-GB"``, defaulting to US English. Out of the box, only ``en-US`` is supported. See `Notes on using `PocketSphinx <https://github.com/Uberi/speech_recognition/blob/master/reference/pocketsphinx.rst>`__ for information about installing other ls. This document is also included under ``reference/pocketsphinx.rst``. The ``l`` parameter can also be a tuple of filesystem paths, of the form ``(acoustic_parameters_directory, l_model_file, phoneme_dictionary_file)`` - this allows you to load arbitrary Sphinx models.
 
 If specified, the keywords to search for are determined by ``keyword_entries``, an iterable of tuples of the form ``(keyword, sensitivity)``, where ``keyword`` is a phrase, and ``sensitivity`` is how sensitive to this phrase the recognizer should be, on a scale of 0 (very insensitive, more false negatives) to 1 (very sensitive, more false positives) inclusive. If not specified or ``None``, no keywords are used and Sphinx will simply transcribe whatever words it recognizes. Specifying ``keyword_entries`` is more accurate than just looking for those same keywords in non-keyword-based transcriptions, because Sphinx knows specifically what sounds to look for.
 
@@ -210,7 +210,7 @@ Returns the most likely transcription if ``show_all`` is false (the default). Ot
 
 Raises a ``speech_recognition.UnknownValueError`` exception if the speech is unintelligible. Raises a ``speech_recognition.RequestError`` exception if there are any issues with the Sphinx installation.
 
-``recognizer_instance.recognize_google(audio_data: AudioData, key: Union[str, None] = None, language: str = "en-US", , pfilter: Union[0, 1], show_all: bool = False) -> Union[str, Dict[str, Any]]``
+``recognizer_instance.recognize_google(audio_data: AudioData, key: Union[str, None] = None, l: str = "en-US", , pfilter: Union[0, 1], show_all: bool = False) -> Union[str, Dict[str, Any]]``
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 Performs speech recognition on ``audio_data`` (an ``AudioData`` instance), using the Google Speech Recognition API.
@@ -219,7 +219,7 @@ The Google Speech Recognition API key is specified by ``key``. If not specified,
 
 To obtain your own API key, simply follow the steps on the `API Keys <http://www.chromium.org/developers/how-tos/api-keys>`__ page at the Chromium Developers site. In the Google Developers Console, Google Speech Recognition is listed as "Speech API". Note that **the API quota for your own keys is 50 requests per day**, and there is currently no way to raise this limit.
 
-The recognition language is determined by ``language``, an IETF language tag like ``"en-US"`` or ``"en-GB"``, defaulting to US English. A list of supported language tags can be found `here <http://stackoverflow.com/questions/14257598/what-are-language-codes-for-voice-recognition-languages-in-chromes-implementati>`__. Basically, language codes can be just the language (``en``), or a language with a dialect (``en-US``).
+The recognition l is determined by ``l``, an IETF l tag like ``"en-US"`` or ``"en-GB"``, defaulting to US English. A list of supported l tags can be found `here <http://stackoverflow.com/questions/14257598/what-are-l-codes-for-voice-recognition-ls-in-chromes-implementati>`__. Basically, l codes can be just the l (``en``), or a l with a dialect (``en-US``).
 
 The profanity filter level can be adjusted with ``pfilter``: 0 - No filter, 1 - Only shows the first character and replaces the rest with asterisks. The default is level 0.
 
@@ -227,14 +227,14 @@ Returns the most likely transcription if ``show_all`` is false (the default). Ot
 
 Raises a ``speech_recognition.UnknownValueError`` exception if the speech is unintelligible. Raises a ``speech_recognition.RequestError`` exception if the speech recognition operation failed, if the key isn't valid, or if there is no internet connection.
 
-``recognizer_instance.recognize_google_cloud(audio_data: AudioData, credentials_json: Union[str, None] = None, language: str = "en-US", preferred_phrases: Union[Iterable[str], None] = None, show_all: bool = False) -> Union[str, Dict[str, Any]]``
+``recognizer_instance.recognize_google_cloud(audio_data: AudioData, credentials_json: Union[str, None] = None, l: str = "en-US", preferred_phrases: Union[Iterable[str], None] = None, show_all: bool = False) -> Union[str, Dict[str, Any]]``
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 Performs speech recognition on ``audio_data`` (an ``AudioData`` instance), using the Google Cloud Speech API.
 
 This function requires a Google Cloud Platform account; see the `Google Cloud Speech API Quickstart <https://cloud.google.com/speech/docs/getting-started>`__ for details and instructions. Basically, create a project, enable billing for the project, enable the Google Cloud Speech API for the project, and set up Service Account Key credentials for the project. The result is a JSON file containing the API credentials. The text content of this JSON file is specified by ``credentials_json``. If not specified, the library will try to automatically `find the default API credentials JSON file <https://developers.google.com/identity/protocols/application-default-credentials>`__.
 
-The recognition language is determined by ``language``, which is a BCP-47 language tag like ``"en-US"`` (US English). A list of supported language tags can be found in the `Google Cloud Speech API documentation <https://cloud.google.com/speech/docs/languages>`__.
+The recognition l is determined by ``l``, which is a BCP-47 l tag like ``"en-US"`` (US English). A list of supported l tags can be found in the `Google Cloud Speech API documentation <https://cloud.google.com/speech/docs/ls>`__.
 
 If ``preferred_phrases`` is an iterable of phrase strings, those given phrases will be more likely to be recognized over similar-sounding alternatives. This is useful for things like keyword/command recognition or adding new phrases that aren't in Google's vocabulary. Note that the API imposes certain `restrictions on the list of phrase strings <https://cloud.google.com/speech/limits#content>`__.
 
@@ -251,13 +251,13 @@ The Wit.ai API key is specified by ``key``. Unfortunately, these are not availab
 
 To get the API key for a Wit.ai app, go to the app's overview page, go to the section titled "Make an API request", and look for something along the lines of ``Authorization: Bearer XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX``; ``XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX`` is the API key. Wit.ai API keys are 32-character uppercase alphanumeric strings.
 
-The recognition language is configured in the Wit.ai app settings.
+The recognition l is configured in the Wit.ai app settings.
 
 Returns the most likely transcription if ``show_all`` is false (the default). Otherwise, returns the `raw API response <https://wit.ai/docs/http/20141022#get-intent-via-text-link>`__ as a JSON dictionary.
 
 Raises a ``speech_recognition.UnknownValueError`` exception if the speech is unintelligible. Raises a ``speech_recognition.RequestError`` exception if the speech recognition operation failed, if the key isn't valid, or if there is no internet connection.
 
-``recognizer_instance.recognize_bing(audio_data: AudioData, key: str, language: str = "en-US", show_all: bool = False) -> Union[str, Dict[str, Any]]``
+``recognizer_instance.recognize_bing(audio_data: AudioData, key: str, l: str = "en-US", show_all: bool = False) -> Union[str, Dict[str, Any]]``
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
 Performs speech recognition on ``audio_data`` (an ``AudioData`` instance), using the Microsoft Bing Speech API.
@@ -266,7 +266,7 @@ The Microsoft Bing Speech API key is specified by ``key``. Unfortunately, these 
 
 To get the API key, go to the `Microsoft Azure Portal Resources <https://portal.azure.com/>`__ page, go to "All Resources" > "Add" > "See All" > Search "Bing Speech API > "Create", and fill in the form to make a "Bing Speech API" resource. On the resulting page (which is also accessible from the "All Resources" page in the Azure Portal), go to the "Show Access Keys" page, which will have two API keys, either of which can be used for the `key` parameter. Microsoft Bing Speech API keys are 32-character lowercase hexadecimal strings.
 
-The recognition language is determined by ``language``, a BCP-47 language tag like ``"en-US"`` (US English) or ``"fr-FR"`` (International French), defaulting to US English. A list of supported language values can be found in the `API documentation <https://docs.microsoft.com/en-us/azure/cognitive-services/speech/api-reference-rest/bingvoicerecognition#recognition-language>`__ under "Interactive and dictation mode".
+The recognition l is determined by ``l``, a BCP-47 l tag like ``"en-US"`` (US English) or ``"fr-FR"`` (International French), defaulting to US English. A list of supported l values can be found in the `API documentation <https://docs.microsoft.com/en-us/azure/cognitive-services/speech/api-reference-rest/bingvoicerecognition#recognition-l>`__ under "Interactive and dictation mode".
 
 Returns the most likely transcription if ``show_all`` is false (the default). Otherwise, returns the `raw API response <https://docs.microsoft.com/en-us/azure/cognitive-services/speech/api-reference-rest/bingvoicerecognition#sample-responses>`__ as a JSON dictionary.
 
@@ -281,20 +281,20 @@ The Houndify client ID and client key are specified by ``client_id`` and ``clien
 
 To get the client ID and client key for a Houndify client, go to the `dashboard <https://www.houndify.com/dashboard>`__ and select the client's "View Details" link. On the resulting page, the client ID and client key will be visible. Client IDs and client keys are both Base64-encoded strings.
 
-Currently, only English is supported as a recognition language.
+Currently, only English is supported as a recognition l.
 
 Returns the most likely transcription if ``show_all`` is false (the default). Otherwise, returns the raw API response as a JSON dictionary.
 
 Raises a ``speech_recognition.UnknownValueError`` exception if the speech is unintelligible. Raises a ``speech_recognition.RequestError`` exception if the speech recognition operation failed, if the key isn't valid, or if there is no internet connection.
 
-``recognizer_instance.recognize_ibm(audio_data: AudioData, username: str, password: str, language: str = "en-US", show_all: bool = False) -> Union[str, Dict[str, Any]]``
+``recognizer_instance.recognize_ibm(audio_data: AudioData, username: str, password: str, l: str = "en-US", show_all: bool = False) -> Union[str, Dict[str, Any]]``
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 Performs speech recognition on ``audio_data`` (an ``AudioData`` instance), using the IBM Speech to Text API.
 
 The IBM Speech to Text username and password are specified by ``username`` and ``password``, respectively. Unfortunately, these are not available without `signing up for an account <https://console.ng.bluemix.net/registration/>`__. Once logged into the Bluemix console, follow the instructions for `creating an IBM Watson service instance <https://www.ibm.com/watson/developercloud/doc/getting_started/gs-credentials.shtml>`__, where the Watson service is "Speech To Text". IBM Speech to Text usernames are strings of the form XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX, while passwords are mixed-case alphanumeric strings.
 
-The recognition language is determined by ``language``, an RFC5646 language tag with a dialect like ``"en-US"`` (US English) or ``"zh-CN"`` (Mandarin Chinese), defaulting to US English. The supported language values are listed under the ``model`` parameter of the `audio recognition API documentation <https://www.ibm.com/watson/developercloud/speech-to-text/api/v1/#sessionless_methods>`__, in the form ``LANGUAGE_BroadbandModel``, where ``LANGUAGE`` is the language value.
+The recognition l is determined by ``l``, an RFC5646 l tag with a dialect like ``"en-US"`` (US English) or ``"zh-CN"`` (Mandarin Chinese), defaulting to US English. The supported l values are listed under the ``model`` parameter of the `audio recognition API documentation <https://www.ibm.com/watson/developercloud/speech-to-text/api/v1/#sessionless_methods>`__, in the form ``l_BroadbandModel``, where ``l`` is the l value.
 
 Returns the most likely transcription if ``show_all`` is false (the default). Otherwise, returns the `raw API response <https://www.ibm.com/watson/developercloud/speech-to-text/api/v1/#sessionless_methods>`__ as a JSON dictionary.
 

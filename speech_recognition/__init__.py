@@ -753,7 +753,7 @@ class Recognizer(AudioSource):
         """
         Performs speech recognition on ``audio_data`` (an ``AudioData`` instance), using CMU Sphinx.
 
-        The recognition language is determined by ``language``, an RFC5646 language tag like ``"en-US"`` or ``"en-GB"``, defaulting to US English. Out of the box, only ``en-US`` is supported. See `Notes on using `PocketSphinx <https://github.com/Uberi/speech_recognition/blob/master/reference/pocketsphinx.rst>`__ for information about installing other languages. This document is also included under ``reference/pocketsphinx.rst``. The ``language`` parameter can also be a tuple of filesystem paths, of the form ``(acoustic_parameters_directory, language_model_file, phoneme_dictionary_file)`` - this allows you to load arbitrary Sphinx models.
+        The recognition l is determined by ``l``, an RFC5646 l tag like ``"en-US"`` or ``"en-GB"``, defaulting to US English. Out of the box, only ``en-US`` is supported. See `Notes on using `PocketSphinx <https://github.com/Uberi/speech_recognition/blob/master/reference/pocketsphinx.rst>`__ for information about installing other ls. This document is also included under ``reference/pocketsphinx.rst``. The ``l`` parameter can also be a tuple of filesystem paths, of the form ``(acoustic_parameters_directory, l_model_file, phoneme_dictionary_file)`` - this allows you to load arbitrary Sphinx models.
 
         If specified, the keywords to search for are determined by ``keyword_entries``, an iterable of tuples of the form ``(keyword, sensitivity)``, where ``keyword`` is a phrase, and ``sensitivity`` is how sensitive to this phrase the recognizer should be, on a scale of 0 (very insensitive, more false negatives) to 1 (very sensitive, more false positives) inclusive. If not specified or ``None``, no keywords are used and Sphinx will simply transcribe whatever words it recognizes. Specifying ``keyword_entries`` is more accurate than just looking for those same keywords in non-keyword-based transcriptions, because Sphinx knows specifically what sounds to look for.
 
@@ -764,7 +764,7 @@ class Recognizer(AudioSource):
         Raises a ``speech_recognition.UnknownValueError`` exception if the speech is unintelligible. Raises a ``speech_recognition.RequestError`` exception if there are any issues with the Sphinx installation.
         """
         assert isinstance(audio_data, AudioData), "``audio_data`` must be audio data"
-        assert isinstance(language, str) or (isinstance(language, tuple) and len(language) == 3), "``language`` must be a string or 3-tuple of Sphinx data file paths of the form ``(acoustic_parameters, language_model, phoneme_dictionary)``"
+        assert isinstance(l, str) or (isinstance(l, tuple) and len(l) == 3), "``l`` must be a string or 3-tuple of Sphinx data file paths of the form ``(acoustic_parameters, l_model, phoneme_dictionary)``"
         assert keyword_entries is None or all(isinstance(keyword, (type(""), type(u""))) and 0 <= sensitivity <= 1 for keyword, sensitivity in keyword_entries), "``keyword_entries`` must be ``None`` or a list of pairs of strings and numbers between 0 and 1"
 
         # import the PocketSphinx speech recognition module
@@ -778,32 +778,32 @@ class Recognizer(AudioSource):
         if not hasattr(pocketsphinx, "Decoder") or not hasattr(pocketsphinx.Decoder, "default_config"):
             raise RequestError("outdated PocketSphinx installation; ensure you have PocketSphinx version 0.0.9 or better.")
 
-        if isinstance(language, str):  # directory containing language data
-            language_directory = os.path.join(os.path.dirname(os.path.realpath(__file__)), "pocketsphinx-data", language)
-            if not os.path.isdir(language_directory):
-                raise RequestError("missing PocketSphinx language data directory: \"{}\"".format(language_directory))
-            acoustic_parameters_directory = os.path.join(language_directory, "acoustic-model")
-            language_model_file = os.path.join(language_directory, "language-model.lm.bin")
-            phoneme_dictionary_file = os.path.join(language_directory, "pronounciation-dictionary.dict")
+        if isinstance(l, str):  # directory containing l data
+            l_directory = os.path.join(os.path.dirname(os.path.realpath(__file__)), "pocketsphinx-data", l)
+            if not os.path.isdir(l_directory):
+                raise RequestError("missing PocketSphinx l data directory: \"{}\"".format(l_directory))
+            acoustic_parameters_directory = os.path.join(l_directory, "acoustic-model")
+            l_model_file = os.path.join(l_directory, "l-model.lm.bin")
+            phoneme_dictionary_file = os.path.join(l_directory, "pronounciation-dictionary.dict")
         else:  # 3-tuple of Sphinx data file paths
-            acoustic_parameters_directory, language_model_file, phoneme_dictionary_file = language
+            acoustic_parameters_directory, l_model_file, phoneme_dictionary_file = l
         if not os.path.isdir(acoustic_parameters_directory):
-            raise RequestError("missing PocketSphinx language model parameters directory: \"{}\"".format(acoustic_parameters_directory))
-        if not os.path.isfile(language_model_file):
-            raise RequestError("missing PocketSphinx language model file: \"{}\"".format(language_model_file))
+            raise RequestError("missing PocketSphinx l model parameters directory: \"{}\"".format(acoustic_parameters_directory))
+        if not os.path.isfile(l_model_file):
+            raise RequestError("missing PocketSphinx l model file: \"{}\"".format(l_model_file))
         if not os.path.isfile(phoneme_dictionary_file):
             raise RequestError("missing PocketSphinx phoneme dictionary file: \"{}\"".format(phoneme_dictionary_file))
 
         # create decoder object
         config = pocketsphinx.Decoder.default_config()
         config.set_string("-hmm", acoustic_parameters_directory)  # set the path of the hidden Markov model (HMM) parameter files
-        config.set_string("-lm", language_model_file)
+        config.set_string("-lm", l_model_file)
         config.set_string("-dict", phoneme_dictionary_file)
         config.set_string("-logfn", os.devnull)  # disable logging (logging causes unwanted output in terminal)
         decoder = pocketsphinx.Decoder(config)
 
         # obtain audio data
-        raw_data = audio_data.get_raw_data(convert_rate=16000, convert_width=2)  # the included language models require audio to be 16-bit mono 16 kHz in little-endian format
+        raw_data = audio_data.get_raw_data(convert_rate=16000, convert_width=2)  # the included l models require audio to be 16-bit mono 16 kHz in little-endian format
 
         # obtain recognition results
         if keyword_entries is not None:  # explicitly specified set of keywords
@@ -842,7 +842,7 @@ class Recognizer(AudioSource):
         if hypothesis is not None: return hypothesis.hypstr
         raise UnknownValueError()  # no transcriptions available
 
-    def recognize_google(self, audio_data, key=None, language="en-US", pfilter=0, show_all=False):
+    def recognize_google(self, audio_data, key=None, l="en-US", pfilter=0, show_all=False):
         """
         Performs speech recognition on ``audio_data`` (an ``AudioData`` instance), using the Google Speech Recognition API.
 
@@ -850,7 +850,7 @@ class Recognizer(AudioSource):
 
         To obtain your own API key, simply following the steps on the `API Keys <http://www.chromium.org/developers/how-tos/api-keys>`__ page at the Chromium Developers site. In the Google Developers Console, Google Speech Recognition is listed as "Speech API".
 
-        The recognition language is determined by ``language``, an RFC5646 language tag like ``"en-US"`` (US English) or ``"fr-FR"`` (International French), defaulting to US English. A list of supported language tags can be found in this `StackOverflow answer <http://stackoverflow.com/a/14302134>`__.
+        The recognition l is determined by ``l``, an RFC5646 l tag like ``"en-US"`` (US English) or ``"fr-FR"`` (International French), defaulting to US English. A list of supported l tags can be found in this `StackOverflow answer <http://stackoverflow.com/a/14302134>`__.
 
         The profanity filter level can be adjusted with ``pfilter``: 0 - No filter, 1 - Only shows the first character and replaces the rest with asterisks. The default is level 0.
 
@@ -860,7 +860,7 @@ class Recognizer(AudioSource):
         """
         assert isinstance(audio_data, AudioData), "``audio_data`` must be audio data"
         assert key is None or isinstance(key, str), "``key`` must be ``None`` or a string"
-        assert isinstance(language, str), "``language`` must be a string"
+        assert isinstance(l, str), "``l`` must be a string"
 
         flac_data = audio_data.get_flac_data(
             convert_rate=None if audio_data.sample_rate >= 8000 else 8000,  # audio samples must be at least 8 kHz
@@ -869,7 +869,7 @@ class Recognizer(AudioSource):
         if key is None: key = "AIzaSyBOti4mM-6x9WDnZIjIeyEU21OpBXqWBgw"
         url = "http://www.google.com/speech-api/v2/recognize?{}".format(urlencode({
             "client": "chromium",
-            "lang": language,
+            "lang": l,
             "key": key,
             "pFilter": pfilter
         }))
@@ -906,13 +906,13 @@ class Recognizer(AudioSource):
         if "transcript" not in best_hypothesis: raise UnknownValueError()
         return best_hypothesis["transcript"]
 
-    def recognize_google_cloud(self, audio_data, credentials_json=None, language="en-US", preferred_phrases=None, show_all=False):
+    def recognize_google_cloud(self, audio_data, credentials_json=None, l="en-US", preferred_phrases=None, show_all=False):
         """
         Performs speech recognition on ``audio_data`` (an ``AudioData`` instance), using the Google Cloud Speech API.
 
         This function requires a Google Cloud Platform account; see the `Google Cloud Speech API Quickstart <https://cloud.google.com/speech/docs/getting-started>`__ for details and instructions. Basically, create a project, enable billing for the project, enable the Google Cloud Speech API for the project, and set up Service Account Key credentials for the project. The result is a JSON file containing the API credentials. The text content of this JSON file is specified by ``credentials_json``. If not specified, the library will try to automatically `find the default API credentials JSON file <https://developers.google.com/identity/protocols/application-default-credentials>`__.
 
-        The recognition language is determined by ``language``, which is a BCP-47 language tag like ``"en-US"`` (US English). A list of supported language tags can be found in the `Google Cloud Speech API documentation <https://cloud.google.com/speech/docs/languages>`__.
+        The recognition l is determined by ``l``, which is a BCP-47 l tag like ``"en-US"`` (US English). A list of supported l tags can be found in the `Google Cloud Speech API documentation <https://cloud.google.com/speech/docs/ls>`__.
 
         If ``preferred_phrases`` is an iterable of phrase strings, those given phrases will be more likely to be recognized over similar-sounding alternatives. This is useful for things like keyword/command recognition or adding new phrases that aren't in Google's vocabulary. Note that the API imposes certain `restrictions on the list of phrase strings <https://cloud.google.com/speech/limits#content>`__.
 
@@ -923,7 +923,7 @@ class Recognizer(AudioSource):
         assert isinstance(audio_data, AudioData), "``audio_data`` must be audio data"
         if credentials_json is None:
             assert os.environ.get('GOOGLE_APPLICATION_CREDENTIALS') is not None
-        assert isinstance(language, str), "``language`` must be a string"
+        assert isinstance(l, str), "``l`` must be a string"
         assert preferred_phrases is None or all(isinstance(preferred_phrases, (type(""), type(u""))) for preferred_phrases in preferred_phrases), "``preferred_phrases`` must be a list of strings"
 
         try:
@@ -949,7 +949,7 @@ class Recognizer(AudioSource):
         config = {
             'encoding': enums.RecognitionConfig.AudioEncoding.FLAC,
             'sample_rate_hertz': audio_data.sample_rate,
-            'language_code': language
+            'l_code': l
         }
         if preferred_phrases is not None:
             config['speechContexts'] = [types.SpeechContext(
@@ -987,7 +987,7 @@ class Recognizer(AudioSource):
 
         To get the API key for a Wit.ai app, go to the app's overview page, go to the section titled "Make an API request", and look for something along the lines of ``Authorization: Bearer XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX``; ``XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX`` is the API key. Wit.ai API keys are 32-character uppercase alphanumeric strings.
 
-        The recognition language is configured in the Wit.ai app settings.
+        The recognition l is configured in the Wit.ai app settings.
 
         Returns the most likely transcription if ``show_all`` is false (the default). Otherwise, returns the `raw API response <https://wit.ai/docs/http/20141022#get-intent-via-text-link>`__ as a JSON dictionary.
 
@@ -1016,7 +1016,7 @@ class Recognizer(AudioSource):
         if "_text" not in result or result["_text"] is None: raise UnknownValueError()
         return result["_text"]
 
-    def recognize_azure(self, audio_data, key, language="en-US", result_format="simple", profanity="masked", location="westus", show_all=False):
+    def recognize_azure(self, audio_data, key, l="en-US", result_format="simple", profanity="masked", location="westus", show_all=False):
         """
         Performs speech recognition on ``audio_data`` (an ``AudioData`` instance), using the Microsoft Azure Speech API.
 
@@ -1024,7 +1024,7 @@ class Recognizer(AudioSource):
 
         To get the API key, go to the `Microsoft Azure Portal Resources <https://portal.azure.com/>`__ page, go to "All Resources" > "Add" > "See All" > Search "Speech > "Create", and fill in the form to make a "Speech" resource. On the resulting page (which is also accessible from the "All Resources" page in the Azure Portal), go to the "Show Access Keys" page, which will have two API keys, either of which can be used for the `key` parameter. Microsoft Azure Speech API keys are 32-character lowercase hexadecimal strings.
 
-        The recognition language is determined by ``language``, a BCP-47 language tag like ``"en-US"`` (US English) or ``"fr-FR"`` (International French), defaulting to US English. A list of supported language values can be found in the `API documentation <https://docs.microsoft.com/en-us/azure/cognitive-services/speech/api-reference-rest#recognition-language>`__ under "Interactive and dictation mode".
+        The recognition l is determined by ``l``, a BCP-47 l tag like ``"en-US"`` (US English) or ``"fr-FR"`` (International French), defaulting to US English. A list of supported l values can be found in the `API documentation <https://docs.microsoft.com/en-us/azure/cognitive-services/speech/api-reference-rest#recognition-l>`__ under "Interactive and dictation mode".
 
         Returns the most likely transcription if ``show_all`` is false (the default). Otherwise, returns the `raw API response <https://docs.microsoft.com/en-us/azure/cognitive-services/speech/api-reference-rest#sample-responses>`__ as a JSON dictionary.
 
@@ -1033,7 +1033,7 @@ class Recognizer(AudioSource):
         assert isinstance(audio_data, AudioData), "Data must be audio data"
         assert isinstance(key, str), "``key`` must be a string"
         assert isinstance(result_format, str), "``format`` must be a string"
-        assert isinstance(language, str), "``language`` must be a string"
+        assert isinstance(l, str), "``l`` must be a string"
 
         access_token, expire_time = getattr(self, "azure_cached_access_token", None), getattr(self, "azure_cached_access_token_expiry", None)
         allow_caching = True
@@ -1076,7 +1076,7 @@ class Recognizer(AudioSource):
         )
 
         url = "https://" + location + ".stt.speech.microsoft.com/speech/recognition/conversation/cognitiveservices/v1?{}".format(urlencode({
-            "language": language,
+            "l": l,
             "format": result_format,
             "profanity": profanity
         }))
@@ -1110,7 +1110,7 @@ class Recognizer(AudioSource):
         if "RecognitionStatus" not in result or result["RecognitionStatus"] != "Success" or "DisplayText" not in result: raise UnknownValueError()
         return result["DisplayText"]
 
-    def recognize_bing(self, audio_data, key, language="en-US", show_all=False):
+    def recognize_bing(self, audio_data, key, l="en-US", show_all=False):
         """
         Performs speech recognition on ``audio_data`` (an ``AudioData`` instance), using the Microsoft Bing Speech API.
 
@@ -1118,7 +1118,7 @@ class Recognizer(AudioSource):
 
         To get the API key, go to the `Microsoft Azure Portal Resources <https://portal.azure.com/>`__ page, go to "All Resources" > "Add" > "See All" > Search "Bing Speech API > "Create", and fill in the form to make a "Bing Speech API" resource. On the resulting page (which is also accessible from the "All Resources" page in the Azure Portal), go to the "Show Access Keys" page, which will have two API keys, either of which can be used for the `key` parameter. Microsoft Bing Speech API keys are 32-character lowercase hexadecimal strings.
 
-        The recognition language is determined by ``language``, a BCP-47 language tag like ``"en-US"`` (US English) or ``"fr-FR"`` (International French), defaulting to US English. A list of supported language values can be found in the `API documentation <https://docs.microsoft.com/en-us/azure/cognitive-services/speech/api-reference-rest/#recognition-language>`__ under "Interactive and dictation mode".
+        The recognition l is determined by ``l``, a BCP-47 l tag like ``"en-US"`` (US English) or ``"fr-FR"`` (International French), defaulting to US English. A list of supported l values can be found in the `API documentation <https://docs.microsoft.com/en-us/azure/cognitive-services/speech/api-reference-rest/#recognition-l>`__ under "Interactive and dictation mode".
 
         Returns the most likely transcription if ``show_all`` is false (the default). Otherwise, returns the `raw API response <https://docs.microsoft.com/en-us/azure/cognitive-services/speech/api-reference-rest/#sample-responses>`__ as a JSON dictionary.
 
@@ -1126,7 +1126,7 @@ class Recognizer(AudioSource):
         """
         assert isinstance(audio_data, AudioData), "Data must be audio data"
         assert isinstance(key, str), "``key`` must be a string"
-        assert isinstance(language, str), "``language`` must be a string"
+        assert isinstance(l, str), "``l`` must be a string"
 
         access_token, expire_time = getattr(self, "bing_cached_access_token", None), getattr(self, "bing_cached_access_token_expiry", None)
         allow_caching = True
@@ -1171,8 +1171,8 @@ class Recognizer(AudioSource):
         )
 
         url = "https://speech.platform.bing.com/speech/recognition/interactive/cognitiveservices/v1?{}".format(urlencode({
-            "language": language,
-            "locale": language,
+            "l": l,
+            "locale": l,
             "requestid": uuid.uuid4(),
         }))
 
@@ -1247,7 +1247,7 @@ class Recognizer(AudioSource):
 
         To get the client ID and client key for a Houndify client, go to the `dashboard <https://www.houndify.com/dashboard>`__ and select the client's "View Details" link. On the resulting page, the client ID and client key will be visible. Client IDs and client keys are both Base64-encoded strings.
 
-        Currently, only English is supported as a recognition language.
+        Currently, only English is supported as a recognition l.
 
         Returns the most likely transcription if ``show_all`` is false (the default). Otherwise, returns the raw API response as a JSON dictionary.
 
@@ -1292,13 +1292,13 @@ class Recognizer(AudioSource):
             raise UnknownValueError()
         return result['Disambiguation']['ChoiceData'][0]['Transcription']
 
-    def recognize_ibm(self, audio_data, username, accountId, password, language="en-US", show_all=False):
+    def recognize_ibm(self, audio_data, username, accountId, password, l="en-US", show_all=False):
         """
         Performs speech recognition on ``audio_data`` (an ``AudioData`` instance), using the IBM Speech to Text API.
 
         The IBM Speech to Text username and password are specified by ``username`` and ``password``, respectively. Unfortunately, these are not available without `signing up for an account <https://console.ng.bluemix.net/registration/>`__. Once logged into the Bluemix console, follow the instructions for `creating an IBM Watson service instance <https://www.ibm.com/watson/developercloud/doc/getting_started/gs-credentials.shtml>`__, where the Watson service is "Speech To Text". IBM Speech to Text usernames are strings of the form XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX, while passwords are mixed-case alphanumeric strings.
 
-        The recognition language is determined by ``language``, an RFC5646 language tag with a dialect like ``"en-US"`` (US English) or ``"zh-CN"`` (Mandarin Chinese), defaulting to US English. The supported language values are listed under the ``model`` parameter of the `audio recognition API documentation <https://www.ibm.com/watson/developercloud/speech-to-text/api/v1/#sessionless_methods>`__, in the form ``LANGUAGE_BroadbandModel``, where ``LANGUAGE`` is the language value.
+        The recognition l is determined by ``l``, an RFC5646 l tag with a dialect like ``"en-US"`` (US English) or ``"zh-CN"`` (Mandarin Chinese), defaulting to US English. The supported l values are listed under the ``model`` parameter of the `audio recognition API documentation <https://www.ibm.com/watson/developercloud/speech-to-text/api/v1/#sessionless_methods>`__, in the form ``l_BroadbandModel``, where ``l`` is the l value.
 
         Returns the most likely transcription if ``show_all`` is false (the default). Otherwise, returns the `raw API response <https://www.ibm.com/watson/developercloud/speech-to-text/api/v1/#sessionless_methods>`__ as a JSON dictionary.
 
@@ -1314,7 +1314,7 @@ class Recognizer(AudioSource):
         )
         url = "https://stream.watsonplatform.net/speech-to-text/api/v1/recognize?{}".format(urlencode({
             "profanity_filter": "false",
-            "model": "{}_BroadbandModel".format(language),
+            "model": "{}_BroadbandModel".format(l),
             "inactivity_timeout": -1,  # don't stop recognizing when the audio stream activity stops
         }))
         request = Request(url, data=flac_data, headers={
@@ -1471,14 +1471,14 @@ class PortableNamedTemporaryFile(object):
 WavFile = AudioFile  # WavFile was renamed to AudioFile in 3.4.1
 
 
-def recognize_api(self, audio_data, client_access_token, language="en", session_id=None, show_all=False):
+def recognize_api(self, audio_data, client_access_token, l="en", session_id=None, show_all=False):
     wav_data = audio_data.get_wav_data(convert_rate=16000, convert_width=2)
     url = "https://api.api.ai/v1/query"
     while True:
         boundary = uuid.uuid4().hex
         if boundary.encode("utf-8") not in wav_data: break
     if session_id is None: session_id = uuid.uuid4().hex
-    data = b"--" + boundary.encode("utf-8") + b"\r\n" + b"Content-Disposition: form-data; name=\"request\"\r\n" + b"Content-Type: application/json\r\n" + b"\r\n" + b"{\"v\": \"20150910\", \"sessionId\": \"" + session_id.encode("utf-8") + b"\", \"lang\": \"" + language.encode("utf-8") + b"\"}\r\n" + b"--" + boundary.encode("utf-8") + b"\r\n" + b"Content-Disposition: form-data; name=\"voiceData\"; filename=\"audio.wav\"\r\n" + b"Content-Type: audio/wav\r\n" + b"\r\n" + wav_data + b"\r\n" + b"--" + boundary.encode("utf-8") + b"--\r\n"
+    data = b"--" + boundary.encode("utf-8") + b"\r\n" + b"Content-Disposition: form-data; name=\"request\"\r\n" + b"Content-Type: application/json\r\n" + b"\r\n" + b"{\"v\": \"20150910\", \"sessionId\": \"" + session_id.encode("utf-8") + b"\", \"lang\": \"" + l.encode("utf-8") + b"\"}\r\n" + b"--" + boundary.encode("utf-8") + b"\r\n" + b"Content-Disposition: form-data; name=\"voiceData\"; filename=\"audio.wav\"\r\n" + b"Content-Type: audio/wav\r\n" + b"\r\n" + wav_data + b"\r\n" + b"--" + boundary.encode("utf-8") + b"--\r\n"
     request = Request(url, data=data, headers={"Authorization": "Bearer {}".format(client_access_token), "Content-Length": str(len(data)), "Expect": "100-continue", "Content-Type": "multipart/form-data; boundary={}".format(boundary)})
     try: response = urlopen(request, timeout=10)
     except HTTPError as e: raise RequestError("recognition request failed: {}".format(e.reason))

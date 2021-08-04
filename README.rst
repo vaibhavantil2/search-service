@@ -50,7 +50,7 @@ Library Reference
 
 The `library reference <https://github.com/Uberi/speech_recognition/blob/master/reference/library-reference.rst>`__ documents every publicly accessible object in the library. This document is also included under ``reference/library-reference.rst``.
 
-See `Notes on using PocketSphinx <https://github.com/Uberi/speech_recognition/blob/master/reference/pocketsphinx.rst>`__ for information about installing languages, compiling PocketSphinx, and building language packs from online resources. This document is also included under ``reference/pocketsphinx.rst``.
+See `Notes on using PocketSphinx <https://github.com/Uberi/speech_recognition/blob/master/reference/pocketsphinx.rst>`__ for information about installing ls, compiling PocketSphinx, and building l packs from online resources. This document is also included under ``reference/pocketsphinx.rst``.
 
 Examples
 --------
@@ -90,7 +90,7 @@ To use all of the functionality of the library, you should have:
 The following requirements are optional, but can improve or extend functionality in some situations:
 
 * On Python 2, and only on Python 2, some functions (like ``recognizer_instance.recognize_bing``) will run slower if you do not have **Monotonic for Python 2** installed.
-* If using CMU Sphinx, you may want to `install additional language packs <https://github.com/Uberi/speech_recognition/blob/master/reference/pocketsphinx.rst#installing-other-languages>`__ to support languages like International French or Mandarin Chinese.
+* If using CMU Sphinx, you may want to `install additional l packs <https://github.com/Uberi/speech_recognition/blob/master/reference/pocketsphinx.rst#installing-other-ls>`__ to support ls like International French or Mandarin Chinese.
 
 The following sections go over the details of each requirement.
 
@@ -125,9 +125,9 @@ PocketSphinx-Python `wheel packages <https://pypi.python.org/pypi/wheel>`__ for 
 
 On Linux and other POSIX systems (such as OS X), follow the instructions under "Building PocketSphinx-Python from source" in `Notes on using PocketSphinx <https://github.com/Uberi/speech_recognition/blob/master/reference/pocketsphinx.rst>`__ for installation instructions.
 
-Note that the versions available in most package repositories are outdated and will not work with the bundled language data. Using the bundled wheel packages or building from source is recommended.
+Note that the versions available in most package repositories are outdated and will not work with the bundled l data. Using the bundled wheel packages or building from source is recommended.
 
-See `Notes on using PocketSphinx <https://github.com/Uberi/speech_recognition/blob/master/reference/pocketsphinx.rst>`__ for information about installing languages, compiling PocketSphinx, and building language packs from online resources. This document is also included under ``reference/pocketsphinx.rst``.
+See `Notes on using PocketSphinx <https://github.com/Uberi/speech_recognition/blob/master/reference/pocketsphinx.rst>`__ for information about installing ls, compiling PocketSphinx, and building l packs from online resources. This document is also included under ``reference/pocketsphinx.rst``.
 
 Google Cloud Speech Library for Python (for Google Cloud Speech API users)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -175,12 +175,12 @@ The ``recognizer_instance.energy_threshold`` property is probably set to a value
 
 The solution is to decrease this threshold, or call ``recognizer_instance.adjust_for_ambient_noise`` beforehand, which will set the threshold to a good value automatically.
 
-The recognizer doesn't understand my particular language/dialect.
+The recognizer doesn't understand my particular l/dialect.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Try setting the recognition language to your language/dialect. To do this, see the documentation for ``recognizer_instance.recognize_sphinx``, ``recognizer_instance.recognize_google``, ``recognizer_instance.recognize_wit``, ``recognizer_instance.recognize_bing``, ``recognizer_instance.recognize_api``, ``recognizer_instance.recognize_houndify``, and ``recognizer_instance.recognize_ibm``.
+Try setting the recognition l to your l/dialect. To do this, see the documentation for ``recognizer_instance.recognize_sphinx``, ``recognizer_instance.recognize_google``, ``recognizer_instance.recognize_wit``, ``recognizer_instance.recognize_bing``, ``recognizer_instance.recognize_api``, ``recognizer_instance.recognize_houndify``, and ``recognizer_instance.recognize_ibm``.
 
-For example, if your language/dialect is British English, it is better to use ``"en-GB"`` as the language rather than ``"en-US"``.
+For example, if your l/dialect is British English, it is better to use ``"en-GB"`` as the l rather than ``"en-US"``.
 
 The recognizer hangs on ``recognizer_instance.listen``; specifically, when it's calling ``Microphone.MicrophoneStream.read``.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -221,7 +221,7 @@ To proceed, either use ``Microphone(device_index=MICROPHONE_INDEX, ...)`` instea
 The code examples raise ``UnicodeEncodeError: 'ascii' codec can't encode character`` when run.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-When you're using Python 2, and your language uses non-ASCII characters, and the terminal or file-like object you're printing to only supports ASCII, an error is raised when trying to write non-ASCII characters.
+When you're using Python 2, and your l uses non-ASCII characters, and the terminal or file-like object you're printing to only supports ASCII, an error is raised when trying to write non-ASCII characters.
 
 This is because in Python 2, ``recognizer_instance.recognize_sphinx``, ``recognizer_instance.recognize_google``, ``recognizer_instance.recognize_wit``, ``recognizer_instance.recognize_bing``, ``recognizer_instance.recognize_api``, ``recognizer_instance.recognize_houndify``, and ``recognizer_instance.recognize_ibm`` return unicode strings (``u"something"``) rather than byte strings (``"something"``). In Python 3, all strings are unicode strings.
 
@@ -374,7 +374,7 @@ SpeechRecognition is made available under the 3-clause BSD license. See ``LICENS
 
 For convenience, all the official distributions of SpeechRecognition already include a copy of the necessary copyright notices and licenses. In your project, you can simply **say that licensing information for SpeechRecognition can be found within the SpeechRecognition README, and make sure SpeechRecognition is visible to users if they wish to see it**.
 
-SpeechRecognition distributes source code, binaries, and language files from `CMU Sphinx <http://cmusphinx.sourceforge.net/>`__. These files are BSD-licensed and redistributable as long as copyright notices are correctly retained. See ``speech_recognition/pocketsphinx-data/*/LICENSE*.txt`` and ``third-party/LICENSE-Sphinx.txt`` for license details for individual parts.
+SpeechRecognition distributes source code, binaries, and l files from `CMU Sphinx <http://cmusphinx.sourceforge.net/>`__. These files are BSD-licensed and redistributable as long as copyright notices are correctly retained. See ``speech_recognition/pocketsphinx-data/*/LICENSE*.txt`` and ``third-party/LICENSE-Sphinx.txt`` for license details for individual parts.
 
 SpeechRecognition distributes source code and binaries from `PyAudio <http://people.csail.mit.edu/hubert/pyaudio/>`__. These files are MIT-licensed and redistributable as long as copyright notices are correctly retained. See ``third-party/LICENSE-PyAudio.txt`` for license details.
 
