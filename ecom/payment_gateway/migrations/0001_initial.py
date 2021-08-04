@@ -21,7 +21,7 @@ class Migration(migrations.Migration):
                 ('updated_at', models.DateTimeField(auto_now_add=True)),
                 ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
                 ('name', models.CharField(max_length=255, verbose_name='name')),
-                ('default', models.BooleanField(default=False, verbose_name='main')),
+                ('coupon_id', models.PositiveSmallIntegerField(blank=True, help_text='', null=True, verbose_name='installment')),
                 ('polymorphic_ctype', models.ForeignKey(editable=False, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='polymorphic_payment_gateway.paymentgateway_set+', to='contenttypes.ContentType')),
             ],
             options={
