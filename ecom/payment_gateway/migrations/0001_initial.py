@@ -34,7 +34,6 @@ class Migration(migrations.Migration):
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now_add=True)),
                 ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('name', models.CharField(choices=[('credit_card', 'credit_card'), ('bank_slip', 'billet')], max_length=255, verbose_name='name')),
                 ('allow_installments', models.BooleanField(default=True, verbose_name='with installments')),
             ],
             options={
