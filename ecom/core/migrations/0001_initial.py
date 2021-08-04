@@ -49,7 +49,7 @@ class Migration(migrations.Migration):
         ),
         migrations.CreateModel(
             name='Checkout',
-            invoice_id=id,
+            return_order_id=id,
             fields=[
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now_add=True)),
