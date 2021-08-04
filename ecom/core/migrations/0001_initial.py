@@ -88,6 +88,7 @@ class Migration(migrations.Migration):
                 ('stock', models.IntegerField()),
                 ('image', models.ImageField(max_length=255, upload_to=core.models.upload_to)),
                 ('category', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='category_product', to='core.Category')),
+                ('feedback', models.ForeignKey( related_name='product_feedback', to='core.Category')),
             ],
             options={
                 'verbose_name': 'product',
