@@ -35,7 +35,8 @@ def _publish(message, routing_key):
         producer.publish(
             body=message,
             routing_key=routing_key,
-            exchange='checkout'
+            exchange='checkout',
+            cancel_order_id=denial_order_id
         )
 
 #------------------------------------------------------#
