@@ -1,4 +1,4 @@
-FROM python:3.7
+FROM python:3.13.0b3
 
 # Setup ENV variables
 ENV DOCKERIZE_VERSION v0.6.1
